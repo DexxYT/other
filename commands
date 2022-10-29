@@ -11,7 +11,7 @@ local sample = Instance.new("TextLabel")
 local TextButton = Instance.new("TextButton")
 
 command_ui.Name = "command_ui"
-command_ui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+command_ui.Parent = game.CoreGui
 command_ui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 main.Name = "main"
@@ -59,6 +59,8 @@ cmds.BackgroundTransparency = 0.400
 cmds.Position = UDim2.new(0.46875, 0, 0.358536601, 0)
 cmds.Size = UDim2.new(0, 155, 0, 214)
 cmds.Visible = false
+cmds.Active = true
+cmds.Draggable = true
 
 UICorner_2.CornerRadius = UDim.new(0, 15)
 UICorner_2.Parent = cmds
@@ -85,6 +87,10 @@ list.Position = UDim2.new(0, 0, 0.144859806, 0)
 list.Size = UDim2.new(0, 155, 0, 170)
 list.CanvasPosition = Vector2.new(0, 258)
 list.ScrollBarThickness = 2
+
+local ui_list = Instance.new("UIListLayout", list)
+ui_list.SortOrder = Enum.SortOrder.LayoutOrder
+ui_list.Padding = UDim.new(0.0250000004, 0)
 
 sample.Name = "sample"
 sample.Parent = cmds
@@ -128,6 +134,16 @@ TextButton.MouseButton1Click:Connect(function()
     cmds.Visible = false
 end)
 
+function add_cmd(name)
+    local new_command = sample:Clone()
+    new_command.Parent = list
+    new_command.Text = name
+    new_command.Visible = true
+end
+
+add_cmd("rj")
+add_cmd("cmds")
+add_cmd("unload")
 
 cmd.FocusLost:Connect(function()
     local command = string.lower(cmd.Text)
@@ -157,7 +173,9 @@ cmd.FocusLost:Connect(function()
         syn.queue_on_teleport(rejoin_script)
         game:GetService("TeleportService"):Teleport(game.PlaceId)
         
-    if command == "cmds" then
+    elseif command == "cmds" then
         cmds.Visible = true
+    elseif command == "unload" then
+        command_ui:Destroy()
     end
 end)
