@@ -1,0 +1,158 @@
+local command_ui = Instance.new("ScreenGui")
+local main = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local cmd = Instance.new("TextBox")
+local side = Instance.new("TextLabel")
+local cmds = Instance.new("Frame")
+local UICorner_2 = Instance.new("UICorner")
+local title = Instance.new("TextLabel")
+local list = Instance.new("ScrollingFrame")
+local sample = Instance.new("TextLabel")
+local TextButton = Instance.new("TextButton")
+
+command_ui.Name = "command_ui"
+command_ui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+command_ui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+main.Name = "main"
+main.Parent = command_ui
+main.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+main.BackgroundTransparency = 0.400
+main.BorderColor3 = Color3.fromRGB(27, 42, 53)
+main.Position = UDim2.new(0.422836304, 0, 0.0182118379, 0)
+main.Size = UDim2.new(0, 295, 0, 31)
+main.Visible = true
+
+UICorner.CornerRadius = UDim.new(0, 15)
+UICorner.Parent = main
+
+cmd.Name = "cmd"
+cmd.Parent = main
+cmd.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+cmd.BackgroundTransparency = 1.000
+cmd.Position = UDim2.new(0.115254238, 0, 0, 0)
+cmd.Size = UDim2.new(0, 248, 0, 31)
+cmd.Font = Enum.Font.Arial
+cmd.PlaceholderText = "enter command"
+cmd.Text = ""
+cmd.TextColor3 = Color3.fromRGB(255, 255, 255)
+cmd.TextSize = 13.000
+cmd.TextXAlignment = Enum.TextXAlignment.Left
+
+side.Name = "side"
+side.Parent = main
+side.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+side.BackgroundTransparency = 1.000
+side.Position = UDim2.new(0.0338983051, 0, 0.258064508, 0)
+side.Size = UDim2.new(0, 15, 0, 15)
+side.Font = Enum.Font.ArialBold
+side.Text = ">"
+side.TextColor3 = Color3.fromRGB(255, 255, 255)
+side.TextScaled = true
+side.TextSize = 14.000
+side.TextWrapped = true
+
+cmds.Name = "cmds"
+cmds.Parent = command_ui
+cmds.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+cmds.BackgroundTransparency = 0.400
+cmds.Position = UDim2.new(0.46875, 0, 0.358536601, 0)
+cmds.Size = UDim2.new(0, 155, 0, 214)
+cmds.Visible = false
+
+UICorner_2.CornerRadius = UDim.new(0, 15)
+UICorner_2.Parent = cmds
+
+title.Name = "title"
+title.Parent = cmds
+title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+title.BackgroundTransparency = 1.000
+title.Position = UDim2.new(0, 0, 0, 5)
+title.Size = UDim2.new(0, 154, 0, 12)
+title.Font = Enum.Font.Arial
+title.Text = "commands"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextSize = 14.000
+
+list.Name = "list"
+list.Parent = cmds
+list.Active = true
+list.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+list.BackgroundTransparency = 1.000
+list.BorderColor3 = Color3.fromRGB(255, 255, 255)
+list.BorderSizePixel = 0
+list.Position = UDim2.new(0, 0, 0.144859806, 0)
+list.Size = UDim2.new(0, 155, 0, 170)
+list.CanvasPosition = Vector2.new(0, 258)
+list.ScrollBarThickness = 2
+
+sample.Name = "sample"
+sample.Parent = cmds
+sample.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+sample.BackgroundTransparency = 1.000
+sample.Position = UDim2.new(0.0516129024, 0, 0, 0)
+sample.Size = UDim2.new(0, 139, 0, 11)
+sample.Visible = false
+sample.Font = Enum.Font.Arial
+sample.Text = "rejoin"
+sample.TextColor3 = Color3.fromRGB(255, 255, 255)
+sample.TextSize = 14.000
+
+TextButton.Parent = cmds
+TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.BackgroundTransparency = 1.000
+TextButton.Position = UDim2.new(0.813000023, 0, 0, 1)
+TextButton.Size = UDim2.new(0, 22, 0, 18)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = "x"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextScaled = true
+TextButton.TextSize = 14.000
+TextButton.TextWrapped = true
+
+local uis = game:GetService("UserInputService")
+
+uis.InputBegan:Connect(function(input, chatting)
+	if not chatting then
+		if input.KeyCode == Enum.KeyCode.RightShift then
+			if not main.Visible then
+				main.Visible = true 
+			else
+				main.Visible = false
+			end
+		end
+	end
+end)
+
+
+cmd.FocusLost:Connect(function()
+    local command = string.lower(cmd.Text)
+
+    if command == "rj" then
+
+        local plr = game.Players.LocalPlayer
+        local char = plr.Character
+        local pos = char.HumanoidRootPart.Position
+        local file = 'rejoin.json'
+        
+        local rejoin_script = [[
+           game:GetService("ReplicatedFirst"):RemoveDefaultLoadingScreen()
+           repeat wait() until game.Players.LocalPlayer
+           repeat wait() until game.Players.LocalPlayer.Character
+           repeat wait() until game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(%s)
+           local plr = game.Players.LocalPlayer
+           local char = plr.Character
+           local file = "%s"
+           local a = readfile(file) 
+        ]]
+
+        rejoin_script = string.format(rejoin_script,tostring(pos),file,"rejoin.lua")
+        writefile('rejoin.lua',rejoin_script)
+        syn.queue_on_teleport(rejoin_script)
+        game:GetService("TeleportService"):Teleport(game.PlaceId)
+        
+    end
+
+end)
