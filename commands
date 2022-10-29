@@ -124,6 +124,10 @@ uis.InputBegan:Connect(function(input, chatting)
 	end
 end)
 
+TextButton.MouseButton1Click:Connect(function()
+    cmds.Visible = false
+end)
+
 
 cmd.FocusLost:Connect(function()
     local command = string.lower(cmd.Text)
@@ -134,7 +138,7 @@ cmd.FocusLost:Connect(function()
         local char = plr.Character
         local pos = char.HumanoidRootPart.Position
         local file = 'rejoin.json'
-        
+
         local rejoin_script = [[
            game:GetService("ReplicatedFirst"):RemoveDefaultLoadingScreen()
            repeat wait() until game.Players.LocalPlayer
@@ -153,6 +157,7 @@ cmd.FocusLost:Connect(function()
         syn.queue_on_teleport(rejoin_script)
         game:GetService("TeleportService"):Teleport(game.PlaceId)
         
+    if command == "cmds" then
+        cmds.Visible = true
     end
-
 end)
